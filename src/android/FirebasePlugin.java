@@ -201,6 +201,9 @@ public class FirebasePlugin extends CordovaPlugin {
         } else if (action.equals("clearAllNotifications")) {
             this.clearAllNotifications(callbackContext);
             return true;
+        } else if (action.equals("clearNotification")) {
+            this.clearNotification(callbackContext, args.getInt(0));
+            return true;
         }
 
         return false;
@@ -963,6 +966,25 @@ public class FirebasePlugin extends CordovaPlugin {
                     NotificationManager nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
                     nm.cancelAll();
                     callbackContext.success();
+                } catch (Exception e) {
+                    Crashlytics.log(e.getMessage());
+                }
+            }
+        });
+    }
+
+    public void clearNotification(final CallbackContext callbackContext, int id) {
+        cordova.getThreadPool().execute(new Runnable() {
+            public void run() {
+                try {
+                    Context context = cordova.getActivity();
+                    NotificationManager nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+                    if (nm != null) {
+                        nm.cancel(id);
+                        callbackContext.success();
+                    }else{
+                        throw new Exception("Notification Manager error");
+                    }
                 } catch (Exception e) {
                     Crashlytics.log(e.getMessage());
                 }
