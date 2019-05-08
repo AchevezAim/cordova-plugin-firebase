@@ -15,7 +15,6 @@ import android.text.TextUtils;
 import android.content.ContentResolver;
 import android.graphics.Color;
 
-import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -47,11 +46,10 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
     @Override
     public void onNewToken(String s) {
         super.onNewToken(s);
-        // Get updated InstanceID token.
-        String refreshedToken = FirebaseInstanceId.getInstance().getToken();
-        Log.d(TAG, "Refreshed token: " + refreshedToken);
+        // Get updated InstanceID token.    
+        Log.d(TAG, "Refreshed token: " + s);
 
-        FirebasePlugin.sendToken(refreshedToken);
+        FirebasePlugin.sendToken(s);
     }
 
     /**
